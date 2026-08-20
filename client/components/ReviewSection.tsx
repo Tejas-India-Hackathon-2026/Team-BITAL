@@ -365,10 +365,7 @@ export default function ReviewSection() {
           transition={{ duration: 0.7 }}
           className="mt-10 text-center"
         >
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.025] px-5 py-3 text-xs text-slate-400 backdrop-blur-xl">
-            <BadgeCheck className="h-4 w-4 text-cyan-400" />
-            <span>Your voice helps build a better Delhi</span>
-          </div>
+          
         </motion.div>
 
       </div>
