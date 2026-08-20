@@ -15,8 +15,9 @@ import {
   MapPin,
   Phone,
   ShieldCheck,
-  
+
 } from "lucide-react";
+
 
 const citiesList = [
   "Smart Delhi",
@@ -135,7 +136,8 @@ export default function Home() {
         this.vx = (Math.random() - 0.5) * 0.6;
         this.vy = (Math.random() - 0.5) * 0.6;
 
-        this.baseRadius = Math.random() * 1.5 + 1;
+        // Thoda base size improve kiya
+        this.baseRadius = Math.random() * 1.8 + 1.2;
         this.radius = this.baseRadius;
       }
 
@@ -168,6 +170,7 @@ export default function Home() {
       draw() {
         if (!ctx) return;
 
+        ctx.save();
         ctx.beginPath();
 
         ctx.arc(
@@ -178,14 +181,19 @@ export default function Home() {
           Math.PI * 2
         );
 
-        ctx.fillStyle = "rgba(34, 211, 238, 0.7)";
+        // Bright neon glow effect
+        ctx.shadowColor = "rgba(34, 211, 238, 0.9)";
+        ctx.shadowBlur = 10;
+        ctx.fillStyle = "rgba(56, 232, 255, 0.95)";
         ctx.fill();
+        ctx.restore();
       }
     }
 
+    // Density badhai: formula ko 6000 kiya aur max limit 160 kar di
     const particleCount = Math.min(
-      Math.floor((width * height) / 12000),
-      80
+      Math.floor((width * height) / 6000),
+      160
     );
 
     const particles: Particle[] = Array.from(
@@ -206,7 +214,7 @@ export default function Home() {
 
           const dist = Math.sqrt(dx * dx + dy * dy);
 
-          if (dist < 200) {
+          if (dist < 150) {
             ctx.beginPath();
 
             ctx.moveTo(
@@ -219,10 +227,10 @@ export default function Home() {
               particles[j].y
             );
 
-            ctx.strokeStyle = `rgba(14, 165, 233, ${0.2 * (1 - dist / 130)
+            ctx.strokeStyle = `rgba(14, 165, 233, ${0.35 * (1 - dist / 150)
               })`;
 
-            ctx.lineWidth = 0.8;
+            ctx.lineWidth = 0.9;
             ctx.stroke();
           }
         }
@@ -319,14 +327,10 @@ export default function Home() {
 
                   <span className="font-bold text-3xl tracking-[0.08em]">
 
-                    <span
-                      className={`${greatVibes.className} text-5xl text-white leading-none`}
-                    >
-                      S
-                    </span>
+
 
                     <span className="-ml-1">
-                      mart
+                      Smart
                     </span>
 
                     <span className="-ml-1 text-blue-500">
@@ -339,7 +343,7 @@ export default function Home() {
                 </div>
 
                 <div className="text-[8px] tracking-[0.4em] uppercase text-slate-500 ml-1">
-                  Intelligent Civic Platform
+                  Make You Responsible
                 </div>
               </div>
 
@@ -418,10 +422,7 @@ export default function Home() {
 
             <div className="lg:col-span-7 space-y-6 relative">
 
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-cyan-400/20 bg-cyan-400/5 text-cyan-300 text-[10px] tracking-[0.2em] uppercase">
-                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-                Delhi Civic Intelligence
-              </div>
+
 
               <h1 className="text-4xl sm:text-6xl lg:text-[68px] font-extrabold tracking-tight leading-[0.95]">
 
@@ -467,9 +468,13 @@ export default function Home() {
 
                   <i className="fa-solid fa-paper-plane text-xs" />
 
-                  <span>
-                    Explore Live Map
-                  </span>
+                  <Link
+                    href="/auth"
+                  >
+                    <span className="relative z-10">
+                      Recent Analysis Delhi Report
+                    </span>
+                  </Link>
 
                   <span className="group-hover:translate-x-1 transition">
                     →
@@ -477,845 +482,40 @@ export default function Home() {
 
                 </button>
 
-                <button className="flex items-center gap-2 bg-gray-900/70 backdrop-blur-md border border-white/10 text-gray-200 px-6 py-3 rounded-xl font-medium text-sm hover:border-blue-500/50 hover:bg-blue-950/30 transition">
 
-                  <i className="fa-solid fa-file-lines text-blue-400" />
-
-                  <span>
-                    Report Complaint
-                  </span>
-
-                </button>
 
               </div>
 
               {/* HERO MINI STATS */}
 
-              <div className="grid grid-cols-3 gap-3 max-w-xl pt-5">
+              <div className="grid grid-cols-3 gap-4 max-w-2xl pt-6">
 
-                <div className="rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-md p-3">
-                  <div className="text-lg font-bold text-cyan-300">
-                    272
+                {/* Wards Card */}
+                <div className="rounded-2xl border border-cyan-500/30 bg-gradient-to-b from-cyan-950/30 to-slate-900/60 shadow-[0_0_20px_rgba(6,182,212,0.18)] backdrop-blur-xl p-5 transition-all hover:border-cyan-400/60 hover:shadow-[0_0_25px_rgba(6,182,212,0.3)]">
+                  <div className="text-3xl font-extrabold text-cyan-300 drop-shadow-[0_0_12px_rgba(6,182,212,0.5)]">
+                    250
                   </div>
-                  <div className="text-[9px] uppercase tracking-wider text-slate-500">
+                  <div className="text-xs font-semibold uppercase tracking-widest text-slate-300 mt-1">
                     Wards
                   </div>
                 </div>
 
-                <div className="rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-md p-3">
-                  <div className="text-lg font-bold text-emerald-300">
-                    96.8%
+                {/* AI Verified Card */}
+                <div className="rounded-2xl border border-emerald-500/30 bg-gradient-to-b from-emerald-950/30 to-slate-900/60 shadow-[0_0_20px_rgba(16,185,129,0.18)] backdrop-blur-xl p-5 transition-all hover:border-emerald-400/60 hover:shadow-[0_0_25px_rgba(16,185,129,0.3)]">
+                  <div className="text-3xl font-extrabold text-emerald-300 drop-shadow-[0_0_12px_rgba(16,185,129,0.5)]">
+                    95.8%
                   </div>
-                  <div className="text-[9px] uppercase tracking-wider text-slate-500">
+                  <div className="text-xs font-semibold uppercase tracking-widest text-slate-300 mt-1">
                     AI Verified
                   </div>
                 </div>
 
-                <div className="rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-md p-3">
-                  <div className="text-lg font-bold text-white">
-                    18 min
-                  </div>
-                  <div className="text-[9px] uppercase tracking-wider text-slate-500">
-                    Avg Response
-                  </div>
-                </div>
 
               </div>
 
             </div>
-<div className="lg:col-span-5 relative group">
+            {/* yahan pr radar ka code pate hoga */}
 
-    {/* =========================================================
-        AMBIENT ENVIRONMENT
-    ========================================================= */}
-
-    <div
-        className="
-            absolute
-            left-1/2
-            top-1/2
-            -translate-x-1/2
-            -translate-y-1/2
-            w-[520px]
-            h-[420px]
-            rounded-full
-            bg-cyan-400/[0.08]
-            blur-[120px]
-            pointer-events-none
-            transition-all
-            duration-1000
-            group-hover:bg-cyan-400/[0.12]
-        "
-    />
-
-    <div
-        className="
-            absolute
-            right-0
-            top-[12%]
-            w-[220px]
-            h-[220px]
-            rounded-full
-            bg-blue-600/[0.08]
-            blur-[100px]
-            pointer-events-none
-        "
-    />
-
-    {/* =========================================================
-        MAIN DISPLAY STAGE
-    ========================================================= */}
-
-    <motion.div
-        initial={{
-            opacity: 0,
-            x: 70,
-            scale: 0.94,
-        }}
-        whileInView={{
-            opacity: 1,
-            x: 0,
-            scale: 1,
-        }}
-        viewport={{
-            once: true,
-            amount: 0.2,
-        }}
-        transition={{
-            duration: 1,
-            ease: [0.22, 1, 0.36, 1],
-        }}
-        className="
-            relative
-            min-h-[560px]
-            lg:min-h-[620px]
-            flex
-            items-center
-            justify-center
-        "
-    >
-
-        {/* =====================================================
-            FLOATING PARTICLES
-        ===================================================== */}
-
-        {[
-            ["7%", "20%", 3.2],
-            ["14%", "74%", 4.1],
-            ["25%", "10%", 3.7],
-            ["78%", "14%", 4.4],
-            ["90%", "62%", 3.5],
-            ["73%", "88%", 4.8],
-            ["44%", "3%", 3.9],
-            ["56%", "94%", 4.2],
-        ].map(([left, top, duration], index) => (
-
-            <motion.span
-                key={index}
-                animate={{
-                    y: [0, -12, 0],
-                    opacity: [0.15, 0.8, 0.15],
-                    scale: [0.7, 1.25, 0.7],
-                }}
-                transition={{
-                    duration: duration as number,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: index * 0.2,
-                }}
-                className="
-                    absolute
-                    w-1
-                    h-1
-                    rounded-full
-                    bg-cyan-300
-                    shadow-[0_0_14px_rgba(34,211,238,0.9)]
-                    pointer-events-none
-                "
-                style={{
-                    left: left as string,
-                    top: top as string,
-                }}
-            />
-
-        ))}
-
-
-        {/* =====================================================
-            DISPLAY FLOAT ANIMATION
-        ===================================================== */}
-
-        <motion.div
-            animate={{
-                y: [0, -8, 0],
-            }}
-            transition={{
-                duration: 7,
-                repeat: Infinity,
-                ease: "easeInOut",
-            }}
-            whileHover={{
-                y: -12,
-                scale: 1.012,
-            }}
-            className="
-                relative
-                z-20
-                w-full
-                max-w-[760px]
-                transition-transform
-                duration-700
-                ease-out
-            "
-        >
-
-            {/* =================================================
-                OUTER DISPLAY GLOW
-            ================================================= */}
-
-            <div
-                className="
-                    absolute
-                    -inset-10
-                    rounded-[45px]
-                    bg-cyan-400/[0.07]
-                    blur-[60px]
-                    pointer-events-none
-                "
-            />
-
-            {/* =================================================
-                MONITOR / LAPTOP BODY
-            ================================================= */}
-
-            <div
-                className="
-                    relative
-                    rounded-[30px]
-                    p-[5px]
-                    bg-gradient-to-b
-                    from-[#26384b]
-                    via-[#101c2b]
-                    to-[#03070d]
-                    shadow-[0_50px_120px_rgba(0,0,0,0.75)]
-                "
-            >
-
-                {/* =================================================
-                    SCREEN BEZEL
-                ================================================= */}
-
-                <div
-                    className="
-                        relative
-                        overflow-hidden
-                        rounded-[26px]
-                        border
-                        border-white/[0.09]
-                        bg-[#02060c]
-                    "
-                >
-
-                    {/* =================================================
-                        DISPLAY CONTENT
-                    ================================================= */}
-
-                    <div
-                        className="
-                            relative
-                            min-h-[450px]
-                            sm:min-h-[480px]
-                            lg:min-h-[500px]
-                            overflow-hidden
-                            bg-[#030812]
-                        "
-                    >
-
-                        {/* BACKGROUND GRID */}
-
-                        <div
-                            className="
-                                absolute
-                                inset-0
-                                opacity-[0.16]
-                                bg-[linear-gradient(rgba(34,211,238,0.10)_1px,transparent_1px),linear-gradient(90deg,rgba(34,211,238,0.10)_1px,transparent_1px)]
-                                bg-[size:32px_32px]
-                            "
-                        />
-
-                        {/* CENTRAL SCREEN GLOW */}
-
-                        <div
-                            className="
-                                absolute
-                                left-1/2
-                                top-[42%]
-                                -translate-x-1/2
-                                -translate-y-1/2
-                                w-[330px]
-                                h-[260px]
-                                rounded-full
-                                bg-cyan-400/[0.06]
-                                blur-[80px]
-                            "
-                        />
-
-                        {/* =================================================
-                            TOP SYSTEM BAR
-                        ================================================= */}
-
-                        <div
-                            className="
-                                relative
-                                z-20
-                                h-[58px]
-                                px-5
-                                sm:px-7
-                                flex
-                                items-center
-                                justify-between
-                                border-b
-                                border-white/[0.06]
-                                bg-white/[0.015]
-                            "
-                        >
-
-                            <div className="flex items-center gap-3">
-
-                                <div className="flex gap-1.5">
-
-                                    <span className="w-2.5 h-2.5 rounded-full bg-red-400/70" />
-                                    <span className="w-2.5 h-2.5 rounded-full bg-amber-300/70" />
-                                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-400/70" />
-
-                                </div>
-
-                                <div className="hidden sm:block ml-3 text-[9px] tracking-[0.28em] uppercase text-slate-500">
-                                    SmartDELHI / Intelligence
-                                </div>
-
-                            </div>
-
-
-                            <div className="flex items-center gap-4">
-
-                                <span className="hidden sm:block text-[9px] uppercase tracking-[0.2em] text-slate-600">
-                                    Delhi Network
-                                </span>
-
-                                <div className="flex items-center gap-2 text-[9px] text-emerald-400">
-
-                                    <span className="relative flex w-2 h-2">
-
-                                        <span className="absolute inset-0 rounded-full bg-emerald-400 animate-ping opacity-50" />
-
-                                        <span className="relative w-2 h-2 rounded-full bg-emerald-400" />
-
-                                    </span>
-
-                                    LIVE
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                        {/* =================================================
-                            MAIN DASHBOARD AREA
-                        ================================================= */}
-
-                        <div className="relative z-10 px-5 sm:px-7 py-6">
-
-                            {/* HEADER */}
-
-                            <div className="flex items-end justify-between">
-
-                                <div>
-
-                                    <div className="flex items-center gap-2">
-
-                                        <span
-                                            className="
-                                                w-1.5
-                                                h-1.5
-                                                rounded-full
-                                                bg-cyan-400
-                                                shadow-[0_0_12px_rgba(34,211,238,0.9)]
-                                            "
-                                        />
-
-                                        <span className="text-[9px] uppercase tracking-[0.3em] text-cyan-400">
-                                            City Intelligence
-                                        </span>
-
-                                    </div>
-
-                                    <h3 className="mt-2 text-2xl sm:text-3xl font-semibold tracking-[-0.04em] text-white">
-                                        Delhi Pulse
-                                    </h3>
-
-                                    <p className="mt-1 text-[11px] text-slate-500">
-                                        Unified civic intelligence system
-                                    </p>
-
-                                </div>
-
-
-                                <div className="text-right">
-
-                                    <p className="text-[8px] uppercase tracking-[0.2em] text-slate-600">
-                                        STATUS
-                                    </p>
-
-                                    <p className="mt-1 text-[10px] text-emerald-400">
-                                        Operational
-                                    </p>
-
-                                </div>
-
-                            </div>
-
-
-                            {/* =================================================
-                                INTELLIGENCE VISUAL
-                            ================================================= */}
-
-                            <div
-                                className="
-                                    relative
-                                    mt-6
-                                    h-[175px]
-                                    sm:h-[190px]
-                                    overflow-hidden
-                                    rounded-[20px]
-                                    border
-                                    border-white/[0.07]
-                                    bg-[#020711]
-                                "
-                            >
-
-                                {/* GRID */}
-
-                                <div
-                                    className="
-                                        absolute
-                                        inset-0
-                                        opacity-50
-                                        bg-[linear-gradient(rgba(34,211,238,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(34,211,238,0.06)_1px,transparent_1px)]
-                                        bg-[size:27px_27px]
-                                    "
-                                />
-
-
-                                {/* RADAR GLOW */}
-
-                                <div
-                                    className="
-                                        absolute
-                                        left-1/2
-                                        top-1/2
-                                        -translate-x-1/2
-                                        -translate-y-1/2
-                                        w-[150px]
-                                        h-[150px]
-                                        rounded-full
-                                        bg-cyan-400/[0.04]
-                                        blur-[35px]
-                                    "
-                                />
-
-
-                                {/* RADAR RINGS */}
-
-                                {[150, 112, 72].map((size, index) => (
-
-                                    <div
-                                        key={size}
-                                        className="
-                                            absolute
-                                            left-1/2
-                                            top-1/2
-                                            -translate-x-1/2
-                                            -translate-y-1/2
-                                            rounded-full
-                                            border
-                                            border-cyan-400/20
-                                        "
-                                        style={{
-                                            width: size,
-                                            height: size,
-                                        }}
-                                    />
-
-                                ))}
-
-
-                                {/* ROTATING RADAR */}
-
-                                <motion.div
-                                    animate={{
-                                        rotate: 360,
-                                    }}
-                                    transition={{
-                                        duration: 14,
-                                        repeat: Infinity,
-                                        ease: "linear",
-                                    }}
-                                    className="
-                                        absolute
-                                        left-1/2
-                                        top-1/2
-                                        -translate-x-1/2
-                                        -translate-y-1/2
-                                        w-[150px]
-                                        h-[150px]
-                                        rounded-full
-                                    "
-                                >
-
-                                    <div
-                                        className="
-                                            absolute
-                                            left-1/2
-                                            top-0
-                                            w-px
-                                            h-1/2
-                                            bg-gradient-to-b
-                                            from-cyan-300
-                                            to-transparent
-                                            origin-bottom
-                                        "
-                                    />
-
-                                </motion.div>
-
-
-                                {/* CENTER */}
-
-                                <div
-                                    className="
-                                        absolute
-                                        left-1/2
-                                        top-1/2
-                                        -translate-x-1/2
-                                        -translate-y-1/2
-                                        text-center
-                                    "
-                                >
-
-                                    <div className="text-[8px] uppercase tracking-[0.3em] text-cyan-400/60">
-                                        DELHI
-                                    </div>
-
-                                    <div className="mt-1 text-xs font-semibold text-white">
-                                        Live Network
-                                    </div>
-
-                                </div>
-
-
-                                {/* SIGNALS */}
-
-                                {[
-                                    ["18%", "30%", "bg-red-400"],
-                                    ["78%", "25%", "bg-amber-300"],
-                                    ["80%", "70%", "bg-purple-400"],
-                                    ["21%", "72%", "bg-cyan-300"],
-                                    ["61%", "18%", "bg-emerald-400"],
-                                    ["39%", "78%", "bg-blue-400"],
-                                ].map(([left, top, color], index) => (
-
-                                    <motion.span
-                                        key={index}
-                                        animate={{
-                                            opacity: [0.2, 1, 0.2],
-                                            scale: [0.6, 1.3, 0.6],
-                                        }}
-                                        transition={{
-                                            duration: 2.2 + index * 0.3,
-                                            repeat: Infinity,
-                                            ease: "easeInOut",
-                                            delay: index * 0.25,
-                                        }}
-                                        className={`
-                                            absolute
-                                            ${color}
-                                            w-1.5
-                                            h-1.5
-                                            rounded-full
-                                        `}
-                                        style={{
-                                            left,
-                                            top,
-                                        }}
-                                    />
-
-                                ))}
-
-
-                                {/* SCANNING BEAM */}
-
-                                <motion.div
-                                    animate={{
-                                        x: ["-120%", "500%"],
-                                    }}
-                                    transition={{
-                                        duration: 4,
-                                        repeat: Infinity,
-                                        ease: "linear",
-                                    }}
-                                    className="
-                                        absolute
-                                        top-0
-                                        bottom-0
-                                        w-20
-                                        bg-gradient-to-r
-                                        from-transparent
-                                        via-cyan-400/[0.12]
-                                        to-transparent
-                                        skew-x-[-15deg]
-                                    "
-                                />
-
-
-                                <div className="absolute left-4 top-4 text-[8px] uppercase tracking-[0.2em] text-slate-600">
-                                    Civic Signals
-                                </div>
-
-                                <div className="absolute right-4 bottom-4 text-[8px] text-emerald-400">
-                                    ● Network stable
-                                </div>
-
-                            </div>
-
-
-                            {/* =================================================
-                                METRICS
-                            ================================================= */}
-
-                            <div className="mt-6 grid grid-cols-3 gap-y-5">
-
-                                {[
-                                    ["Complaints", "1,284", "text-white"],
-                                    ["AI Verified", "96.8%", "text-emerald-300"],
-                                    ["Response", "18 min", "text-white"],
-                                    ["Solved", "1,031", "text-white"],
-                                    ["Departments", "12", "text-white"],
-                                    ["Wards", "272", "text-cyan-300"],
-                                ].map(([label, value, color], index) => (
-
-                                    <motion.div
-                                        key={label}
-                                        initial={{
-                                            opacity: 0,
-                                            y: 8,
-                                        }}
-                                        whileInView={{
-                                            opacity: 1,
-                                            y: 0,
-                                        }}
-                                        viewport={{
-                                            once: true,
-                                        }}
-                                        transition={{
-                                            duration: 0.45,
-                                            delay: index * 0.06,
-                                        }}
-                                        whileHover={{
-                                            y: -3,
-                                        }}
-                                        className="cursor-default"
-                                    >
-
-                                        <p className="text-[8px] uppercase tracking-[0.15em] text-slate-600">
-                                            {label}
-                                        </p>
-
-                                        <p
-                                            className={`
-                                                mt-1
-                                                text-lg
-                                                sm:text-xl
-                                                font-semibold
-                                                tracking-tight
-                                                ${color}
-                                            `}
-                                        >
-                                            {value}
-                                        </p>
-
-                                    </motion.div>
-
-                                ))}
-
-                            </div>
-
-
-                            {/* =================================================
-                                SYSTEM FOOTER
-                            ================================================= */}
-
-                            <div
-                                className="
-                                    mt-5
-                                    pt-4
-                                    border-t
-                                    border-white/[0.06]
-                                    flex
-                                    items-center
-                                    justify-between
-                                "
-                            >
-
-                                <div>
-
-                                    <p className="text-[8px] uppercase tracking-[0.2em] text-slate-600">
-                                        Intelligence Core
-                                    </p>
-
-                                    <p className="mt-1 text-[9px] text-slate-500">
-                                        Monitoring civic infrastructure
-                                    </p>
-
-                                </div>
-
-                                <div className="flex items-center gap-2">
-
-                                    <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.8)]" />
-
-                                    <span className="text-[8px] uppercase tracking-[0.2em] text-cyan-400">
-                                        ACTIVE
-                                    </span>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                        {/* =================================================
-                            GLASS REFLECTION
-                        ================================================= */}
-
-                        <div
-                            className="
-                                absolute
-                                inset-x-0
-                                top-0
-                                h-[30%]
-                                bg-gradient-to-b
-                                from-white/[0.055]
-                                via-white/[0.012]
-                                to-transparent
-                                pointer-events-none
-                            "
-                        />
-
-                    </div>
-
-                </div>
-
-
-                {/* =================================================
-                    DISPLAY LOWER EDGE
-                ================================================= */}
-
-                <div
-                    className="
-                        relative
-                        mx-auto
-                        w-[72%]
-                        h-[14px]
-                        bg-gradient-to-b
-                        from-[#24364a]
-                        to-[#07101b]
-                        rounded-b-[18px]
-                        shadow-[0_15px_35px_rgba(0,0,0,0.6)]
-                    "
-                >
-
-                    <div
-                        className="
-                            absolute
-                            left-1/2
-                            top-1/2
-                            -translate-x-1/2
-                            -translate-y-1/2
-                            w-14
-                            h-1
-                            rounded-full
-                            bg-white/[0.08]
-                        "
-                    />
-
-                </div>
-
-
-                {/* =================================================
-                    FLOOR LIGHT
-                ================================================= */}
-
-                <div
-                    className="
-                        absolute
-                        left-1/2
-                        bottom-[-35px]
-                        -translate-x-1/2
-                        w-[65%]
-                        h-[45px]
-                        rounded-full
-                        bg-cyan-400/[0.09]
-                        blur-[30px]
-                        pointer-events-none
-                    "
-                />
-
-            </div>
-
-        </motion.div>
-
-
-        {/* =====================================================
-            FLOATING CAPTION
-        ===================================================== */}
-
-        <motion.div
-            initial={{
-                opacity: 0,
-                y: 10,
-            }}
-            whileInView={{
-                opacity: 1,
-                y: 0,
-            }}
-            viewport={{
-                once: true,
-            }}
-            transition={{
-                delay: 0.8,
-                duration: 0.6,
-            }}
-            className="
-                absolute
-                -bottom-2
-                left-1/2
-                -translate-x-1/2
-                whitespace-nowrap
-                text-[8px]
-                uppercase
-                tracking-[0.32em]
-                text-cyan-400/45
-            "
-        >
-            SmartDELHI Intelligence Core
-        </motion.div>
-
-    </motion.div>
-
-</div>
           </main>
 
           {/* =================================================
@@ -1339,7 +539,7 @@ export default function Home() {
               </div>
 
               <div className="text-xl font-bold mt-0.5">
-                284
+                1250
               </div>
 
               <div className="text-[10px] text-gray-400 mt-1">
@@ -1359,11 +559,11 @@ export default function Home() {
               </div>
 
               <div className="text-xs text-gray-400 font-medium">
-                Roads
+                Roads Damage
               </div>
 
               <div className="text-xl font-bold mt-0.5">
-                121
+                529
               </div>
 
               <div className="text-[10px] text-gray-400 mt-1">
@@ -1387,7 +587,7 @@ export default function Home() {
               </div>
 
               <div className="text-xl font-bold mt-0.5">
-                89
+                100
               </div>
 
               <div className="text-[10px] text-gray-400 mt-1">
@@ -1435,7 +635,7 @@ export default function Home() {
               </div>
 
               <div className="text-xl font-bold mt-0.5">
-                44
+                200
               </div>
 
               <div className="text-[10px] text-gray-400 mt-1">
@@ -1455,16 +655,14 @@ export default function Home() {
               </div>
 
               <div className="text-xs text-gray-400 font-medium">
-                AQI
+                AvG Delhi AQI
               </div>
 
               <div className="text-xl font-bold mt-0.5">
-                31
+                250
               </div>
 
-              <div className="text-[10px] text-gray-400 mt-1">
-                Active Complaints
-              </div>
+
 
             </div>
 
@@ -1506,7 +704,7 @@ export default function Home() {
                 </h3>
 
                 <a
-                  href="#"
+                  href="/report"
                   className="text-xs text-blue-400 hover:text-blue-300 font-medium flex items-center gap-1"
                 >
                   <span>
@@ -1549,7 +747,7 @@ export default function Home() {
                 <div className="grid grid-cols-12 items-center px-2 py-2 rounded-xl bg-white/5 border border-white/5 hover:border-emerald-400/20 transition">
 
                   <span className="col-span-1 font-bold text-blue-400">
-                    #1
+                    1
                   </span>
 
                   <span className="col-span-4 font-medium text-white">
@@ -1569,17 +767,17 @@ export default function Home() {
                   </span>
 
                   <span className="col-span-3 text-right font-medium text-gray-300">
-                    12 min
+                    20 min
                   </span>
 
                 </div>
 
-                {/* JANAKPURI */}
+                {/* janakpuri */}
 
                 <div className="grid grid-cols-12 items-center px-2 py-2 rounded-xl bg-white/5 border border-white/5 hover:border-emerald-400/20 transition">
 
                   <span className="col-span-1 font-bold text-blue-400">
-                    #2
+                    2
                   </span>
 
                   <span className="col-span-4 font-medium text-white">
@@ -1599,11 +797,68 @@ export default function Home() {
                   </span>
 
                   <span className="col-span-3 text-right font-medium text-gray-300">
-                    14 min
+                    30 min
                   </span>
 
                 </div>
+                {/* Sunder Nagar */}
 
+                <div className="grid grid-cols-12 items-center px-2 py-2 rounded-xl bg-white/5 border border-white/5 hover:border-emerald-400/20 transition">
+
+                  <span className="col-span-1 font-bold text-blue-400">
+                    3
+                  </span>
+
+                  <span className="col-span-4 font-medium text-white">
+                    Sunder Nagar
+                  </span>
+
+                  <span className="col-span-4 flex items-center gap-2">
+
+                    <span className="font-bold">
+                      94.2%
+                    </span>
+
+                    <div className="w-20 h-1.5 bg-black/50 rounded-full overflow-hidden">
+                      <div className="w-[95%] h-full bg-emerald-400 rounded-full" />
+                    </div>
+
+                  </span>
+
+                  <span className="col-span-3 text-right font-medium text-gray-300">
+                    30 min
+                  </span>
+
+                </div>
+                {/* vasant kunj */}
+
+                <div className="grid grid-cols-12 items-center px-2 py-2 rounded-xl bg-white/5 border border-white/5 hover:border-emerald-400/20 transition">
+
+                  <span className="col-span-1 font-bold text-blue-400">
+                    4
+                  </span>
+
+                  <span className="col-span-4 font-medium text-white">
+                    Vasant Kunj
+                  </span>
+
+                  <span className="col-span-4 flex items-center gap-2">
+
+                    <span className="font-bold">
+                      92.2%
+                    </span>
+
+                    <div className="w-20 h-1.5 bg-black/50 rounded-full overflow-hidden">
+                      <div className="w-[95%] h-full bg-emerald-400 rounded-full" />
+                    </div>
+
+                  </span>
+
+                  <span className="col-span-3 text-right font-medium text-gray-300">
+                    40 min
+                  </span>
+
+                </div>
               </div>
 
             </div>
@@ -1724,23 +979,7 @@ export default function Home() {
 
               </div>
 
-              {/* SYSTEM FOOTER */}
 
-              <div className="mt-6 pt-5 border-t border-white/10 flex items-center justify-between">
-
-                <div className="text-xs text-slate-500">
-                  Delhi civic network
-                </div>
-
-                <div className="flex items-center gap-2 text-[10px] text-emerald-400">
-
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-
-                  All systems normal
-
-                </div>
-
-              </div>
 
 
             </div>
@@ -1756,15 +995,15 @@ export default function Home() {
     SMARTDELHI — PREMIUM DASHBOARD FOOTER
 ========================================================= */}
 
-<footer className="relative mt-24 overflow-hidden border-t border-white/[0.08] bg-[#030814]">
+          <footer className="relative mt-24 overflow-hidden border-t border-white/[0.08] bg-[#030814]">
 
-  {/* Ambient glow */}
-  <div className="pointer-events-none absolute -top-32 left-[15%] h-72 w-72 rounded-full bg-cyan-500/[0.06] blur-[110px]" />
-  <div className="pointer-events-none absolute -bottom-32 right-[10%] h-80 w-80 rounded-full bg-blue-600/[0.07] blur-[120px]" />
+            {/* Ambient glow */}
+            <div className="pointer-events-none absolute -top-32 left-[15%] h-72 w-72 rounded-full bg-cyan-500/[0.06] blur-[110px]" />
+            <div className="pointer-events-none absolute -bottom-32 right-[10%] h-80 w-80 rounded-full bg-blue-600/[0.07] blur-[120px]" />
 
-  {/* Subtle grid */}
-  <div
-    className="
+            {/* Subtle grid */}
+            <div
+              className="
       pointer-events-none
       absolute
       inset-0
@@ -1772,23 +1011,23 @@ export default function Home() {
       bg-[linear-gradient(rgba(56,189,248,0.8)_1px,transparent_1px),linear-gradient(90deg,rgba(56,189,248,0.8)_1px,transparent_1px)]
       bg-[size:42px_42px]
     "
-  />
+            />
 
-  <div className="relative mx-auto max-w-7xl px-6 py-16 lg:px-8">
+            <div className="relative mx-auto max-w-7xl px-6 py-16 lg:px-8">
 
-    {/* =====================================================
+              {/* =====================================================
         TOP BRAND ROW
     ===================================================== */}
 
-    <div className="mb-14 flex flex-col gap-8 border-b border-white/[0.07] pb-10 lg:flex-row lg:items-end lg:justify-between">
+              <div className="mb-14 flex flex-col gap-8 border-b border-white/[0.07] pb-10 lg:flex-row lg:items-end lg:justify-between">
 
-      <div className="max-w-xl">
+                <div className="max-w-xl">
 
-        <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-3">
 
-          {/* Logo */}
-          <div
-            className="
+                    {/* Logo */}
+                    <div
+                      className="
               flex
               h-11
               w-11
@@ -1802,36 +1041,36 @@ export default function Home() {
               to-blue-600/10
               shadow-[0_0_30px_rgba(34,211,238,0.08)]
             "
-          >
-            <span className="text-lg font-black tracking-tight text-cyan-300">
-              SD
-            </span>
-          </div>
+                    >
+                      <span className="text-lg font-black tracking-tight text-cyan-300">
+                        SD
+                      </span>
+                    </div>
 
-          <div>
-            <h2 className="text-xl font-bold tracking-tight text-white">
-              Smart<span className="text-cyan-400">DELHI</span>
-            </h2>
+                    <div>
+                      <h2 className="text-xl font-bold tracking-tight text-white">
+                        Smart<span className="text-cyan-400">DELHI</span>
+                      </h2>
 
-            <p className="mt-0.5 text-[10px] uppercase tracking-[0.25em] text-slate-500">
-              Digital Civic Intelligence
-            </p>
-          </div>
+                      <p className="mt-0.5 text-[10px] uppercase tracking-[0.25em] text-slate-500">
+                        Digital Civic Intelligence
+                      </p>
+                    </div>
 
-        </div>
+                  </div>
 
-        <p className="mt-6 max-w-lg text-sm leading-7 text-slate-500">
-          A unified digital platform designed to connect citizens,
-          civic workers and administration through intelligent
-          complaint management and real-time civic insights.
-        </p>
+                  <p className="mt-6 max-w-lg text-sm leading-7 text-slate-500">
+                    A unified digital platform designed to connect citizens,
+                    civic workers and administration through intelligent
+                    complaint management and real-time civic insights.
+                  </p>
 
-      </div>
+                </div>
 
-      {/* System status */}
+                {/* System status */}
 
-      <div
-        className="
+                <div
+                  className="
           inline-flex
           w-fit
           items-center
@@ -1843,346 +1082,344 @@ export default function Home() {
           px-4
           py-2.5
         "
-      >
+                >
 
-        <span className="relative flex h-2 w-2">
-          <span className="absolute inset-0 animate-ping rounded-full bg-emerald-400/60" />
-          <span className="relative h-2 w-2 rounded-full bg-emerald-400" />
-        </span>
-
-        <span className="text-[10px] font-medium uppercase tracking-[0.18em] text-emerald-400">
-          Civic Systems Operational
-        </span>
-
-      </div>
-
-    </div>
+                  <span className="relative flex h-2 w-2">
+                    <span className="absolute inset-0 animate-ping rounded-full bg-emerald-400/60" />
+                    <span className="relative h-2 w-2 rounded-full bg-emerald-400" />
+                  </span>
 
 
-    {/* =====================================================
+
+                </div>
+
+              </div>
+
+
+              {/* =====================================================
         MAIN FOOTER GRID
     ===================================================== */}
 
-    <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-5 lg:gap-8">
+              <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-5 lg:gap-8">
 
-      {/* -----------------------------------------------------
+                {/* -----------------------------------------------------
           SMARTDELHI
       ----------------------------------------------------- */}
 
-      <div className="lg:col-span-1">
+                <div className="lg:col-span-1">
 
-        <h3 className="mb-6 inline-block border-b border-cyan-400/40 pb-2 text-sm font-semibold text-white">
-          SmartDELHI
-        </h3>
+                  <h3 className="mb-6 inline-block border-b border-cyan-400/40 pb-2 text-sm font-semibold text-white">
+                    SmartDELHI
+                  </h3>
 
-        <ul className="space-y-3.5">
+                  <ul className="space-y-3.5">
 
-          <li>
-            <Link
-              href="/"
-              className="group flex items-center gap-1.5 text-sm text-slate-400 transition-colors duration-300 hover:text-cyan-300"
-            >
-              Home
-              <ArrowUpRight className="h-3 w-3 opacity-0 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100" />
-            </Link>
-          </li>
+                    <li>
+                      <Link
+                        href="/"
+                        className="group flex items-center gap-1.5 text-sm text-slate-400 transition-colors duration-300 hover:text-cyan-300"
+                      >
+                        Home
+                        <ArrowUpRight className="h-3 w-3 opacity-0 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100" />
+                      </Link>
+                    </li>
 
-          <li>
-            <Link
-              href="/about-us"
-              className="group flex items-center gap-1.5 text-sm text-slate-400 transition-colors duration-300 hover:text-cyan-300"
-            >
-              About Us
-              <ArrowUpRight className="h-3 w-3 opacity-0 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100" />
-            </Link>
-          </li>
+                    <li>
+                      <Link
+                        href="/about-us"
+                        className="group flex items-center gap-1.5 text-sm text-slate-400 transition-colors duration-300 hover:text-cyan-300"
+                      >
+                        About Us
+                        <ArrowUpRight className="h-3 w-3 opacity-0 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100" />
+                      </Link>
+                    </li>
 
-          <li>
-            <Link
-              href="/contact"
-              className="group flex items-center gap-1.5 text-sm text-slate-400 transition-colors duration-300 hover:text-cyan-300"
-            >
-              Contact
-              <ArrowUpRight className="h-3 w-3 opacity-0 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100" />
-            </Link>
-          </li>
+                    <li>
+                      <Link
+                        href="/contact"
+                        className="group flex items-center gap-1.5 text-sm text-slate-400 transition-colors duration-300 hover:text-cyan-300"
+                      >
+                        Contact
+                        <ArrowUpRight className="h-3 w-3 opacity-0 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100" />
+                      </Link>
+                    </li>
 
-        </ul>
+                  </ul>
 
-      </div>
+                </div>
 
 
-      {/* -----------------------------------------------------
+                {/* -----------------------------------------------------
           CIVIC SERVICES
       ----------------------------------------------------- */}
 
-      <div>
+                <div>
 
-        <h3 className="mb-6 inline-block border-b border-cyan-400/40 pb-2 text-sm font-semibold text-white">
-          Civic Services
-        </h3>
+                  <h3 className="mb-6 inline-block border-b border-cyan-400/40 pb-2 text-sm font-semibold text-white">
+                    Civic Services
+                  </h3>
 
-        <ul className="space-y-3.5">
+                  <ul className="space-y-3.5">
 
-          <li>
-            <Link
-              href="/auth"
-              className="text-sm text-slate-400 transition-colors duration-300 hover:text-cyan-300"
-            >
-              Report a Complaint
-            </Link>
-          </li>
+                    <li>
+                      <Link
+                        href="/auth"
+                        className="text-sm text-slate-400 transition-colors duration-300 hover:text-cyan-300"
+                      >
+                        Report a Complaint
+                      </Link>
+                    </li>
 
-          <li>
-            <Link
-              href="/auth"
-              className="text-sm text-slate-400 transition-colors duration-300 hover:text-cyan-300"
-            >
-              Track Complaint
-            </Link>
-          </li>
+                    <li>
+                      <Link
+                        href="/auth"
+                        className="text-sm text-slate-400 transition-colors duration-300 hover:text-cyan-300"
+                      >
+                        Track Complaint
+                      </Link>
+                    </li>
 
-          <li>
-            <Link
-              href="/auth"
-              className="text-sm text-slate-400 transition-colors duration-300 hover:text-cyan-300"
-            >
-              Citizen Dashboard
-            </Link>
-          </li>
+                    <li>
+                      <Link
+                        href="/auth"
+                        className="text-sm text-slate-400 transition-colors duration-300 hover:text-cyan-300"
+                      >
+                        Citizen Dashboard
+                      </Link>
+                    </li>
 
-          <li>
-            <Link
-              href="/live-intelligence"
-              className="text-sm text-slate-400 transition-colors duration-300 hover:text-cyan-300"
-            >
-              Live Intelligence
-            </Link>
-          </li>
+                    <li>
+                      <Link
+                        href="/live-intelligence"
+                        className="text-sm text-slate-400 transition-colors duration-300 hover:text-cyan-300"
+                      >
+                        Live Intelligence
+                      </Link>
+                    </li>
 
-        </ul>
+                  </ul>
 
-      </div>
+                </div>
 
 
-      {/* -----------------------------------------------------
+                {/* -----------------------------------------------------
           PLATFORM
       ----------------------------------------------------- */}
 
-      <div>
+                <div>
 
-        <h3 className="mb-6 inline-block border-b border-cyan-400/40 pb-2 text-sm font-semibold text-white">
-          Platform
-        </h3>
+                  <h3 className="mb-6 inline-block border-b border-cyan-400/40 pb-2 text-sm font-semibold text-white">
+                    Platform
+                  </h3>
 
-        <ul className="space-y-3.5">
+                  <ul className="space-y-3.5">
 
-          <li>
-            <Link
-              href="/reports"
-              className="text-sm text-slate-400 transition-colors duration-300 hover:text-cyan-300"
-            >
-              Reports & Analytics
-            </Link>
-          </li>
+                    <li>
+                      <Link
+                        href="/reports"
+                        className="text-sm text-slate-400 transition-colors duration-300 hover:text-cyan-300"
+                      >
+                        Reports & Analytics
+                      </Link>
+                    </li>
 
-          <li>
-            <Link
-              href="/auth"
-              className="text-sm text-slate-400 transition-colors duration-300 hover:text-cyan-300"
-            >
-              Ward Intelligence
-            </Link>
-          </li>
+                    <li>
+                      <Link
+                        href="/auth"
+                        className="text-sm text-slate-400 transition-colors duration-300 hover:text-cyan-300"
+                      >
+                        Ward Intelligence
+                      </Link>
+                    </li>
 
-          <li>
-            <Link
-              href="/auth"
-              className="text-sm text-slate-400 transition-colors duration-300 hover:text-cyan-300"
-            >
-              Delhi Civic Map
-            </Link>
-          </li>
+                    <li>
+                      <Link
+                        href="/auth"
+                        className="text-sm text-slate-400 transition-colors duration-300 hover:text-cyan-300"
+                      >
+                        Delhi Civic Map
+                      </Link>
+                    </li>
 
-          <li>
-            <Link
-              href="/auth"
-              className="text-sm text-slate-400 transition-colors duration-300 hover:text-cyan-300"
-            >
-              Notifications
-            </Link>
-          </li>
+                    <li>
+                      <Link
+                        href="/auth"
+                        className="text-sm text-slate-400 transition-colors duration-300 hover:text-cyan-300"
+                      >
+                        Notifications
+                      </Link>
+                    </li>
 
-        </ul>
+                  </ul>
 
-      </div>
+                </div>
 
 
-      {/* -----------------------------------------------------
+                {/* -----------------------------------------------------
           CONNECT
       ----------------------------------------------------- */}
 
-    <div>
+                <div>
 
-  <h3 className="mb-6 inline-block border-b border-cyan-400/40 pb-2 text-sm font-semibold text-white">
-    Connect
-  </h3>
+                  <h3 className="mb-6 inline-block border-b border-cyan-400/40 pb-2 text-sm font-semibold text-white">
+                    Connect
+                  </h3>
 
-  <ul className="space-y-4">
+                  <ul className="space-y-4">
 
-    <li>
-      <a
-        href="www.linkedin.com/in/vishwanath-s-19858b333"
-        className="group flex items-center gap-3 text-sm text-slate-400 transition-colors duration-300 hover:text-cyan-300"
-      >
-        <span className="flex h-7 w-7 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-[11px] font-bold text-slate-400 transition-all group-hover:border-cyan-400/30 group-hover:bg-cyan-400/10 group-hover:text-cyan-300">
-          in
-        </span>
-        LinkedIn
-      </a>
-    </li>
+                    <li>
+                      <a
+                        href="www.linkedin.com/in/vishwanath-s-19858b333"
+                        className="group flex items-center gap-3 text-sm text-slate-400 transition-colors duration-300 hover:text-cyan-300"
+                      >
+                        <span className="flex h-7 w-7 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-[11px] font-bold text-slate-400 transition-all group-hover:border-cyan-400/30 group-hover:bg-cyan-400/10 group-hover:text-cyan-300">
+                          in
+                        </span>
+                        LinkedIn
+                      </a>
+                    </li>
 
-    <li>
-      <a
-        href=""
-        className="group flex items-center gap-3 text-sm text-slate-400 transition-colors duration-300 hover:text-cyan-300"
-      >
-        <span className="flex h-7 w-7 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-[13px] font-semibold text-slate-400 transition-all group-hover:border-cyan-400/30 group-hover:bg-cyan-400/10 group-hover:text-cyan-300">
-          ◎
-        </span>
-        Instagram
-      </a>
-    </li>
+                    <li>
+                      <a
+                        href=""
+                        className="group flex items-center gap-3 text-sm text-slate-400 transition-colors duration-300 hover:text-cyan-300"
+                      >
+                        <span className="flex h-7 w-7 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-[13px] font-semibold text-slate-400 transition-all group-hover:border-cyan-400/30 group-hover:bg-cyan-400/10 group-hover:text-cyan-300">
+                          ◎
+                        </span>
+                        Instagram
+                      </a>
+                    </li>
 
-    <li>
-      <a
-        href="https://github.com/vishwanathsingh1703-hub?tab=overview&from=2026-08-01&to=2026-08-14"
-        className="group flex items-center gap-3 text-sm text-slate-400 transition-colors duration-300 hover:text-cyan-300"
-      >
-        <span className="flex h-7 w-7 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-[11px] font-bold text-slate-400 transition-all group-hover:border-cyan-400/30 group-hover:bg-cyan-400/10 group-hover:text-cyan-300">
-          GH
-        </span>
-        GitHub
-      </a>
-    </li>
+                    <li>
+                      <a
+                        href="https://github.com/vishwanathsingh1703-hub?tab=overview&from=2026-08-01&to=2026-08-14"
+                        className="group flex items-center gap-3 text-sm text-slate-400 transition-colors duration-300 hover:text-cyan-300"
+                      >
+                        <span className="flex h-7 w-7 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-[11px] font-bold text-slate-400 transition-all group-hover:border-cyan-400/30 group-hover:bg-cyan-400/10 group-hover:text-cyan-300">
+                          GH
+                        </span>
+                        GitHub
+                      </a>
+                    </li>
 
-  </ul>
+                  </ul>
 
-</div>
+                </div>
 
 
-      {/* -----------------------------------------------------
+                {/* -----------------------------------------------------
           DELHI CIVIC OFFICE
       ----------------------------------------------------- */}
 
-      <div>
+                <div>
 
-        <h3 className="mb-6 inline-block border-b border-cyan-400/40 pb-2 text-sm font-semibold text-white">
-          Delhi Civic Network
-        </h3>
+                  <h3 className="mb-6 inline-block border-b border-cyan-400/40 pb-2 text-sm font-semibold text-white">
+                    Delhi Civic Network
+                  </h3>
 
-        <div className="space-y-5">
+                  <div className="space-y-5">
 
-          <div className="flex gap-3">
+                    <div className="flex gap-3">
 
-            <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-cyan-400" />
+                      <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-cyan-400" />
 
-            <div>
-              <p className="text-sm font-medium text-slate-300">
-                Delhi, India
-              </p>
+                      <div>
+                        <p className="text-sm font-medium text-slate-300">
+                          Delhi, India
+                        </p>
 
-              <p className="mt-1 text-xs leading-5 text-slate-500">
-                National Capital Territory (NCR)
-              </p>
-            </div>
+                        <p className="mt-1 text-xs leading-5 text-slate-500">
+                          National Capital Territory (NCR)
+                        </p>
+                      </div>
 
-          </div>
-
-
-          <div className="flex gap-3">
-
-            <Phone className="mt-0.5 h-4 w-4 shrink-0 text-cyan-400" />
-
-            <div>
-
-              <p className="text-sm font-medium text-slate-300">
-               +91 8957403462
-              </p>
-
-              <p className="mt-1 text-xs text-slate-500">
-                Available through SmartDELHI
-              </p>
-
-            </div>
-
-          </div>
+                    </div>
 
 
-          <div className="flex gap-3">
+                    <div className="flex gap-3">
 
-            <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" />
+                      <Phone className="mt-0.5 h-4 w-4 shrink-0 text-cyan-400" />
 
-            <div>
+                      <div>
 
-              <p className="text-sm font-medium text-slate-300">
-                Secure Platform
-              </p>
+                        <p className="text-sm font-medium text-slate-300">
+                          +91 8957403462
+                        </p>
 
-              <p className="mt-1 text-xs leading-5 text-slate-500">
-                Protected civic data infrastructure
-              </p>
+                        <p className="mt-1 text-xs text-slate-500">
+                          Available through SmartDELHI
+                        </p>
 
-            </div>
+                      </div>
 
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
+                    </div>
 
 
-    {/* =====================================================
+                    <div className="flex gap-3">
+
+                      <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" />
+
+                      <div>
+
+                        <p className="text-sm font-medium text-slate-300">
+                          Secure Platform
+                        </p>
+
+                        <p className="mt-1 text-xs leading-5 text-slate-500">
+                          Protected civic data infrastructure
+                        </p>
+
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+
+              {/* =====================================================
         BOTTOM BAR
     ===================================================== */}
 
-    <div className="mt-14 flex flex-col gap-5 border-t border-white/[0.07] pt-7 md:flex-row md:items-center md:justify-between">
+              <div className="mt-14 flex flex-col gap-5 border-t border-white/[0.07] pt-7 md:flex-row md:items-center md:justify-between">
 
-      <p className="text-xs text-slate-600">
-        © {new Date().getFullYear()} SmartDELHI. Built for a smarter Delhi.
-      </p>
+                <p className="text-xs text-slate-600">
+                  © {new Date().getFullYear()} SmartDELHI. Built for a smarter Delhi.
+                </p>
 
-      <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+                <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
 
-        <Link
-          href="/privacy"
-          className="text-xs text-slate-600 transition-colors hover:text-cyan-400"
-        >
-          Privacy
-        </Link>
+                  <Link
+                    href="/privacy"
+                    className="text-xs text-slate-600 transition-colors hover:text-cyan-400"
+                  >
+                    Privacy
+                  </Link>
 
-        <Link
-          href="/terms"
-          className="text-xs text-slate-600 transition-colors hover:text-cyan-400"
-        >
-          Terms
-        </Link>
+                  <Link
+                    href="/terms"
+                    className="text-xs text-slate-600 transition-colors hover:text-cyan-400"
+                  >
+                    Terms
+                  </Link>
 
-        <span className="hidden h-3 w-px bg-white/10 sm:block" />
+                  <span className="hidden h-3 w-px bg-white/10 sm:block" />
 
-        <span className="flex items-center gap-2 text-xs text-slate-600">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.7)]" />
-          Platform Online
-        </span>
+                  <span className="flex items-center gap-2 text-xs text-slate-600">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.7)]" />
+                    Platform Online
+                  </span>
 
-      </div>
+                </div>
 
-    </div>
+              </div>
 
-  </div>
-</footer>
+            </div>
+          </footer>
         </section>
 
       </div>
