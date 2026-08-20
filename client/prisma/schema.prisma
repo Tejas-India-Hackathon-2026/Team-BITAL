@@ -1,0 +1,188 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  CITIZEN
+  WORKER
+  ADMIN
+}
+
+model User {
+  id           String  @id @default(cuid())
+  name         String
+  email        String  @unique
+  passwordHash String
+  role         Role    @default(CITIZEN)
+  ward         String?
+  phone        String?
+  isActive     Boolean @default(true)
+
+  // Citizen complaints
+  complaints Complaint[] @relation("CitizenComplaints")
+
+  // Worker assigned complaints
+  assignedComplaints Complaint[] @relation("WorkerComplaints")
+
+  notifications Notification[]
+  feedbacks     Feedback[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Complaint {
+  id          String  @id @default(cuid())
+  title       String
+  description String?
+  category    String
+  ward        String
+
+  status   String @default("Pending")
+  priority String @default("Medium")
+
+  // =====================================================
+  // CITIZEN MEDIA
+  // =====================================================
+
+  imageUrl  String?
+  imageUrls String[] @default([])
+  videoUrl  String?
+
+  // =====================================================
+  // LOCATION
+  // =====================================================
+
+  latitude  Float?
+  longitude Float?
+
+  // =====================================================
+  // AI VERIFICATION
+  // =====================================================
+
+  aiVerified      Boolean   @default(false)
+  aiDecision      String?
+  aiSeverity      String?
+  aiScore         Float?
+  aiReason        String?
+  aiAnalysis      Json?
+  aiDetectedIssue String?
+  aiAnalyzedAt    DateTime?
+
+  // =====================================================
+  // ADMIN APPEAL / ESCALATION
+  // =====================================================
+
+  adminAppeal       Boolean   @default(false)
+  adminAppealReason String?
+  adminDecision     String?
+  adminReviewedAt   DateTime?
+
+  // =====================================================
+  // CITIZEN RELATION
+  // =====================================================
+
+  userId String?
+  user   User?   @relation("CitizenComplaints", fields: [userId], references: [id], onDelete: SetNull)
+
+  // =====================================================
+  // WORKER RELATION
+  // =====================================================
+
+  assignedWorkerId String?
+  assignedWorker   User?   @relation("WorkerComplaints", fields: [assignedWorkerId], references: [id], onDelete: SetNull)
+
+  // =====================================================
+  // WORK COMPLETION / CITIZEN VERIFICATION
+  // =====================================================
+
+  workCompletedAt   DateTime?
+  citizenVerified   Boolean   @default(false)
+  citizenVerifiedAt DateTime?
+
+  // =====================================================
+  // FEEDBACK
+  // =====================================================
+
+  feedback Feedback?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Feedback {
+  id String @id @default(cuid())
+
+  complaintId String    @unique
+  complaint   Complaint @relation(fields: [complaintId], references: [id], onDelete: Cascade)
+
+  citizenId String
+  workerId  String?
+
+  rating      Int
+  description String?
+
+  createdAt DateTime @default(now())
+
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+}
+
+model Notification {
+  id      String  @id @default(cuid())
+  userId  String
+  title   String
+  message String
+  type    String  @default("INFO")
+  isRead  Boolean @default(false)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Vehicle {
+  id          String  @id @default(cuid())
+  vehicleNo   String  @unique
+  type        String  @default("Garbage Truck")
+  ward        String?
+  status      String  @default("AVAILABLE")
+  driverName  String?
+  driverPhone String?
+  latitude    Float?
+  longitude   Float?
+  isActive    Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Ward {
+  id     String  @id @default(cuid())
+  number Int     @unique
+  name   String
+  zone   String?
+
+  // Demographic data
+  population Int?
+  households Int?
+
+  // Ward importance / infrastructure
+  importanceScore     Float @default(1)
+  infrastructureScore Float @default(1)
+
+  // Budget
+  budget      Float @default(0)
+  spentBudget Float @default(0)
+
+  isActive Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
